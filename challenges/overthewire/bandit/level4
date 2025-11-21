@@ -1,0 +1,13 @@
+bandit4@bandit:~/inhere$ for i in ./*; do file "$i"; done
+./-file00: data
+./-file01: OpenPGP Public Key
+./-file02: OpenPGP Public Key
+./-file03: data
+./-file04: data
+./-file05: data
+./-file06: data
+./-file07: ASCII text
+./-file08: data
+./-file09: data
+bandit4@bandit:~/inhere$ cat < ./-file07
+4oQYVPkxZOOEOO5pTW81FB8j8lxXGUQw

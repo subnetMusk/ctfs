@@ -1,0 +1,16 @@
+http://natas3.natas.labs.overthewire.org/s3cr3t/users.txt
+
+natas4:QryZXc2e0zahULdHrtHxzyYkj59kUxLQ
+
+
+L'hint diceva:
+<div id="content">
+There is nothing on this page
+<!-- No more information leaks!! Not even Google will find it this time... -->
+</div>
+
+Supponendo dunque che esistesse robots.txt:
+http://natas3.natas.labs.overthewire.org/robots.txt
+
+User-agent: *
+Disallow: /s3cr3t/

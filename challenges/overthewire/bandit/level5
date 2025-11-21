@@ -1,0 +1,4 @@
+bandit5@bandit:~$ find inhere -type f -size 1033c ! -executable 2>/dev/null
+inhere/maybehere07/.file2
+bandit5@bandit:~$ cat inhere/maybehere07/.file2
+HWasnPhtq9AVKe0dmk45nxy20cvUa6EG

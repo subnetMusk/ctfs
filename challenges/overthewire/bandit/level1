@@ -1,0 +1,7 @@
+file "-" in home
+
+How to open a "-" dashed filename using terminal?
+Both cat < - and ./- command will give you the output
+
+cat < -
+263JGJPfgU6LtdEvgfWU1XP5yac29mFx
