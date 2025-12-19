@@ -45,9 +45,19 @@ state = [
 
 
 def sub_bytes(s, sbox=s_box):
-    # ???
-    return
+    result = []
+    for x in s:
+        line = []
+        for y in x:
+            coordinates = str(hex(y))[2:].zfill(2)
+            c1 = int("0x"+coordinates[0], 0)
+            c2 = int("0x"+coordinates[1], 0)
+            line.append(sbox[((c1 * 16) + c2)])
+        result.append(line)
+    return result
 
-
-print(sub_bytes(state, sbox=inv_s_box))
+mat = sub_bytes(state, sbox=inv_s_box)
+for m1 in mat:
+    for m2 in m1:
+        print(chr(m2), end="")
 

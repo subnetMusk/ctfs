@@ -1,0 +1,3 @@
+Build: docker build -t cpp/ajax_not_soap .
+Run: docker run  -d -p "127.0.0.1:8085:80" --name "ajax_not_soap" "cpp/ajax_not_soap"
+Stop: docker stop ajax_not_soap

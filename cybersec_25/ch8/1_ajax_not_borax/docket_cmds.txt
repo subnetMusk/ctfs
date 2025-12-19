@@ -1,0 +1,3 @@
+Build: docker build -t cpp/ajax_not_borax .
+Run: docker run  -d -p "127.0.0.1:8083:80" --name "ajax_not_borax" "cpp/ajax_not_borax"
+Stop: docker stop ajax_not_borax

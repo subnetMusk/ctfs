@@ -1,0 +1,3 @@
+Build: docker build -t cpp/sweeeeeeeet .
+Run: docker run  -d -p "127.0.0.1:8084:80" --name "sweeeeeeeet" "cpp/sweeeeeeeet"
+Stop: docker stop sweeeeeeeet

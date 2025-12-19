@@ -1,0 +1,6 @@
+You don't have access to any file.
+The challenge can be resolved only browser side.
+
+(use ./docker_cmds.txt to manage ctf container)
+
+# encryptCTF{i_H4t3_inJ3c7i0n5}

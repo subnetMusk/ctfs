@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Welcome 👋</h1>
+  <p>This public page is perfect to explore the <strong>Elements/Inspector</strong> and the <strong>Console</strong>.</p>
+
+  <div class="card">
+    <h2>Try the Console</h2>
+    <button id="btn-console">Log something</button>
+    <button id="btn-breakpoint">Trigger a breakpoint</button>
+  </div>
+
+  <div class="card">
+    <h2>Network tab demo</h2>
+    <p>Click to perform a couple of API requests so you can inspect them in the <strong>Network</strong> panel.</p>
+    <button id="btn-network">Run network demo</button>
+    <button id="btn-ping">Quick /api/ping</button>
+  </div>
+
+  <div class="card">
+    <h2>Storage Playground</h2>
+    <p>
+      Toggle a feature flag stored in <code>localStorage</code> to reveal a hidden panel.
+      Open <em>Application → Storage</em> to inspect and edit.
+    </p>
+    <button id="btn-toggle-flag">Toggle <code>showAdmin</code></button>
+    <div id="admin-panel" class="hidden">
+      <strong>Admin Panel</strong>
+      <p>Shown because <code>localStorage.showAdmin === 'true'</code>.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>DOM Inspector Challenge</h2>
+    <p>There is a <span class="spoiler" data-secret="DOM-FTW">hidden message</span> inside this page. Can you reveal it using the inspector?</p>
+  </div>
+{% endblock %}

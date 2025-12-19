@@ -1,0 +1,35 @@
+int __fastcall main(int argc, const char **argv, const char **envp)
+{
+  char v3; // al
+  int i; // [rsp+0h] [rbp-40h]
+  int j; // [rsp+4h] [rbp-3Ch]
+  FILE *stream; // [rsp+8h] [rbp-38h]
+  char filename[24]; // [rsp+10h] [rbp-30h] BYREF
+  unsigned __int64 v9; // [rsp+28h] [rbp-18h]
+
+  v9 = __readfsqword(0x28u);
+  for ( i = 0; i < strlen(s); ++i )
+  {
+    if ( (i & 1) != 0 )
+      v3 = 1;
+    else
+      v3 = -1;
+    t[i + 10] = s[i] + v3;
+  }
+  strcpy(filename, "/tmp/flag.txt");
+  stream = fopen(filename, "w");
+  fprintf(stream, "%s\n", u);
+  for ( j = 0; j < strlen(t); ++j )
+  {
+    fseek(stream, p[j], 0);
+    fputc(t[p[j]], stream);
+    fseek(stream, 0, 0);
+  }
+  fclose(stream);
+  remove(filename);
+  return 0;
+}
+
+ho patchato il file e messo un break in 0x4008c8, ossia prima che il file con la flag venga rimosso.
+
+SharifCTF{b70c59275fcfa8aebf2d5911223c6589}

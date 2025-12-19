@@ -1,0 +1,43 @@
+Flage{reverse_hello_world}
+
+disassemblando si vede:
+int __fastcall main(int argc, const char **argv, const char **envp)
+
+{
+
+  char v4[4]; // [rsp+14h] [rbp-Ch] BYREF
+
+  unsigned __int64 v5; // [rsp+18h] [rbp-8h]
+
+
+  v5 = __readfsqword(0x28u);
+
+  puts("Insert the right pin (4 alpha-numeric characters): ");
+
+  gets(v4);
+
+  printf("You inserted: %s\n", v4);
+
+  if ( v4[0] == 70 && v4[1] == 108 && v4[2] == 52 && v4[3] == 103 )
+
+  {
+
+    print_flag("You inserted: %s\n", v4);
+
+    return 0;
+
+  }
+
+  else
+
+  {
+
+    puts("Wrong password");
+
+    return 0;
+
+  }
+
+} 
+
+quell'if controlla che i caratteri corrispondano a certi caratteri ascii

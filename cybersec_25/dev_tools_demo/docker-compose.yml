@@ -1,0 +1,44 @@
+name: dev_tools_demo
+
+services:
+  # --------------------------- Web Application ------------------------------
+  web:
+    # Build context uses local Dockerfile to produce an image
+    build: .
+    # Give the resulting image a readable name
+    image: cpp/dev_tools_demo_web
+    # Environment variables injected into the container process
+    environment:
+      # Secret used by Flask to sign session cookies (use a strong key in prod)
+      - SECRET_KEY=${SECRET_KEY}
+      # SQLAlchemy PostgreSQL URL — points to the 'db' service hostname
+      - DATABASE_URL=${DATABASE_URL}
+    # Port mapping: host 5000 → container 5000 (Flask dev server)
+    ports:
+      - "5005:5000"
+    # Ensure DB is healthy before starting web
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ------------------------------- Database ---------------------------------
+  db:
+    image: postgres:16
+    # Standard Postgres config via env vars (kept in .env for convenience)
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    # Simple healthcheck: compose waits until Postgres answers
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # Persist DB state across restarts in a named volume
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+# ------------------------------- Volumes ------------------------------------
+volumes:
+  db_data:

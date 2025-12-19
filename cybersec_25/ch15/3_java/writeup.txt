@@ -1,0 +1,45 @@
+root@7d15ef362000:/app# (python3 exploit.py; echo ""; cat) | ./java
+Enter your favourite programming language: Just another Java noob...
+ls
+description.txt  exploit.py  flag.txt  java  java.c  java.id0  java.id1  java.id2  java.nam  java.til
+cat flag.txt
+flag{this_is_a_flag}
+
+----- writeup
+WRITEUP: STACK-BASED FUNCTION POINTER OVERWRITE - BINARY "JAVA"
+
+    BINARY ANALYSIS Il target è un eseguibile ELF 64-bit per architetture x86-64, non pos-independent (No-PIE, base address 0x400000). Dall'analisi statica si evince l'utilizzo di librerie standard (libc) e la presenza di tre funzioni principali candidate per il reindirizzamento del flusso: python(), bash() e nothing().
+
+    VULNERABILITY DISCOVERY: UNBOUNDED STACK WRITE La vulnerabilità risiede nella funzione main (offset 0x4007F7). Il programma alloca un buffer locale 's1' di 48 byte (posizionato a rbp-0x30). L'input viene acquisito tramite un ciclo basato su getchar() (offset 0x40086A) che utilizza la variabile 'var_4' come indice.
+
+Il ciclo non implementa alcun controllo sui limiti (bounds checking) dell'indice rispetto alla dimensione del buffer. Questo permette una scrittura arbitraria sullo stack (Stack-Based Buffer Overflow) proporzionale alla lunghezza dell'input fornito dall'utente.
+
+    MEMORY LAYOUT & TARGET IDENTIFICATION Nello stack frame del main, le variabili locali rilevanti sono organizzate come segue:
+
+    [rbp-0x30]: buffer 's1' (48 byte)
+
+    [rbp-0x10]: variabile 'var_10' (8 byte, puntatore a funzione)
+
+    [rbp-0x04]: variabile 'var_4' (4 byte, contatore del ciclo)
+
+L'obiettivo dell'exploit è sovrascrivere 'var_10', poiché essa viene dereferenziata ed eseguita tramite l'istruzione "call rdx" (offset 0x400911) al termine della funzione.
+
+    LOGIC BYPASS & CONSTRAINTS Il programma implementa una serie di strncmp per determinare quale indirizzo assegnare a 'var_10'. Se l'input non soddisfa i check per "python" o "bash", il programma cade in un ramo "else" (offset 0x4008F4) che sovrascrive 'var_10' con l'indirizzo della funzione nothing().
+
+Tuttavia, il ramo relativo alla stringa "java" (offset 0x400894) stampa semplicemente un messaggio e salta direttamente alla chiamata di var_10, senza resettare il puntatore. Pertanto, utilizzare il prefisso "java" è essenziale per preservare il valore sovrascritto nel buffer overflow.
+
+    EXPLOITATION STRATEGY Il reindirizzamento punta alla funzione bash(), ma con un accorgimento. La funzione bash() integra un controllo deterministico su rand() (offset 0x40079B). Per evitare il fallimento della condizione, l'exploit punta direttamente all'offset 0x4007A2. In questo punto, lo stack è già preparato per l'esecuzione di execlp("/bin/sh", ...), permettendo lo spawning di una shell interattiva.
+
+    PAYLOAD CONSTRUCTION Il payload è strutturato per soddisfare i vincoli di allineamento della memoria a 64 bit:
+
+    Prefix (4 byte): "java" -> Necessario per il bypass della logica di reset.
+
+    Padding (28 byte): Padding generico (es. 0x41) per colmare la distanza tra la fine del prefisso e l'inizio di 'var_10' (32 byte totali dall'inizio del buffer).
+
+    Target Address (8 byte): 0x00000000004007A2 in formato Little Endian (\xa2\x07\x40\x00\x00\x00\x00\x00).
+
+    Terminator (1 byte): Line feed (\x0a) per interrompere il ciclo di lettura.
+
+    EXECUTION L'exploit viene lanciato concatenando l'output di uno script Python allo standard input del binario, mantenendo il canale aperto tramite il comando 'cat' per l'interazione post-exploitation:
+
+(python3 -c 'import sys; sys.stdout.buffer.write(b"java" + b"A"*28 + b"\xa2\x07\x40\x00\x00\x00\x00\x00" + b"\n")'; cat) | ./java

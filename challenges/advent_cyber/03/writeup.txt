@@ -1,0 +1,10 @@
+`csd{dn5_m19HT_B3_K1ND4_W0NKy}`
+
+### Riepilogo dei passaggi:
+1.  **Ricognizione Iniziale:** Ho analizzato i record DNS di `krampus.csd.lol`, trovando il sottodominio `mail` (MX) e un riferimento SPF.
+2.  **DMARC:** Controllando `_dmarc.krampus.csd.lol`, ho trovato un indirizzo email `forensics@ops.krampus.csd.lol`, svelando il sottodominio `ops`.
+3.  **Servizi Interni:** Analizzando i record TXT di `ops.krampus.csd.lol`, ho scoperto i servizi nascosti `_ldap`, `_kerberos` e `_metrics`.
+4.  **Beacon:** Tramite query SRV su `_metrics`, ho individuato l'host `beacon.krampus.csd.lol`.
+5.  **Exfil:** Il record TXT di `beacon` conteneva un dato codificato in Base64 che puntava a `exfil.krampus.csd.lol`.
+6.  **DKIM:** Il record TXT di `exfil` indicava un selettore DKIM `syndicate`.
+7.  **Flag:** Interrogando il record TXT di `syndicate._domainkey.krampus.csd.lol`, ho trovato la chiave pubblica che, una volta decodificata, ha rivelato la flag.

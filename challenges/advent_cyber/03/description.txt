@@ -1,0 +1,11 @@
+Our monitoring systems have flagged suspicious DNS activity originating from a domain registered by the KRAMPUS SYNDICATE. Initial analysis suggests they're using it to coordinate operations against crucial North Pole systems.
+
+The domain in question: krampus.csd.lol
+
+We need you to perform a full DNS reconnaissance sweep. The Syndicate thinks they're clever, hiding their infrastructure in plain sight but they're wrong.
+
+Map their infrastructure. Find what they're hiding. Report back before they realize we're onto them.
+
+- NPLD Threat Intelligence Division
+
+Note: All the information you need is in the DNS records. Dig deep.

@@ -1,0 +1,7 @@
+You control the browser
+
+http://127.0.0.1:8081
+
+use commands inside ./docker_cmds.txt to run the challenge
+
+RULES: you don't have access to web

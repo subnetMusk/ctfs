@@ -1,0 +1,86 @@
+# CTF Challenge Writeup: Mainframe Authentication Module
+
+## 1. Challenge Goal
+The challenge presented an "mainframe authentication module" binary and tasked us with performing static analysis to "figure out what gets you in" without using debuggers. The objective was to find the correct access code/password.
+
+## 2. Initial Reconnaissance
+Upon receiving the files, `description.txt` provided the narrative for the challenge, and `day4` was identified as the binary in question.
+First, I checked the file type of the `day4` binary:
+`file day4`
+Output: `day4: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=..., for GNU/Linux 3.2.0, stripped`
+This confirmed it was a 64-bit stripped ELF executable for Linux, indicating that debugging symbols were removed, requiring purely static analysis.
+
+## 3. Static Analysis with objdump
+To understand the binary's logic, I used `objdump` to disassemble the `.text` section (containing executable code) with Intel syntax for readability:
+`objdump -d -M intel day4`
+
+## 4. Key Code Analysis
+I analyzed the disassembled output, focusing on the `.text` section.
+
+### Input Mechanism
+The analysis revealed a call similar to `fgets` around address `0x11c2`, which reads user input from `stdin`. The buffer size for this input was `0x40` (64 bytes), meaning it could read up to 63 characters plus a null terminator.
+
+Relevant disassembly:
+```assembly
+11b3: 48 8b 15 56 2e 00 00          mov     rdx, qword ptr [rip + 0x2e56] # 0x4010 <stdin>
+11ba: be 40 00 00 00                mov     esi, 0x40           ; size (64)
+11bf: 48 89 df                      mov     rdi, rbx            ; buffer address
+11c2: e8 39 ff ff ff                call    0x1100 <.plt.sec+0x40> ; fgets call
+```
+
+### 0xdeadbeef Check
+There was a function called at `0x118f` and `0x11fc` (address `0x1339`). This function performed a check against the value `0xdeadbeef` from a global variable located at `0x4008`. If this value was not `0xdeadbeef`, an error message ("Nice try, but Santa sees when you're peeking!") would be printed. This check did not directly lead to the password but indicated an integrity or state check.
+
+Relevant disassembly:
+```assembly
+133d: 8b 05 c5 2c 00 00             mov     eax, dword ptr [rip + 0x2cc5] # 0x4008
+1343: 3d ef be ad de                cmp     eax, 0xdeadbeef
+1348: 74 17                         je      0x1361 <.text+0x221>
+; ... if not equal, print error and exit ...
+```
+
+### Password Validation Logic
+The core authentication logic was found in a function called at `0x1204` (address `0x1362`). This function iterated 23 times, comparing characters from the user's input with an encoded string. Each character of the user's input was XORed with `0x42` (decimal 66, ASCII 'B') before comparison.
+
+Relevant disassembly:
+```assembly
+1368: 48 8d 0d a1 0d 00 00          lea     rcx, [rip + 0xda1]      # 0x2110 ; encoded password string
+; ... loop starts ...
+136f: 0f be 14 07                   movsx   edx, byte ptr [rdi + rax] ; user input byte
+1373: 0f b6 34 01                   movzx   esi, byte ptr [rcx + rax] ; encoded string byte
+1377: 83 f2 42                      xor     edx, 0x42                 ; XOR with 0x42
+137a: 39 f2                         cmp     edx, esi                  ; compare
+137c: 75 0f                         jne     0x138d <.text+0x24d>      ; jump if not equal (failure)
+; ... loop continues for 23 iterations ...
+```
+
+## 5. Password Extraction and Decryption
+The encoded password string was located at memory address `0x2110` within the `.rodata` section. I dumped the `.rodata` section using `objdump -s -j .rodata day4`.
+
+```
+2110 21312639 732c3672 1d362a71 1d2f7673  !1&9s,6r.6*q./vs
+2120 2c243076 2f713f                      ,$0v/q?
+```
+
+Initially, I attempted to read the string from the ASCII representation on the right. However, this was misleading because non-printable characters are represented as dots (`.`). Examining the hex values revealed that the bytes at offset 8 and 12 were `0x1d`, not `0x2e` (dot).
+
+Correct hex bytes: `21 31 26 39 73 2c 36 72 1d 36 2a 71 1d 2f 76 73 2c 24 30 76 2f 71 3f`
+
+To decrypt, each byte needed to be XORed with `0x42`. I used a Python script with the raw byte values:
+
+```python
+hex_bytes = [0x21, 0x31, 0x26, 0x39, 0x73, 0x2c, 0x36, 0x72, 0x1d, 0x36, 0x2a, 0x71, 0x1d, 0x2f, 0x76, 0x73, 0x2c, 0x24, 0x30, 0x76, 0x2f, 0x71, 0x3f]
+xor_key = 0x42 # 66 in decimal, ASCII 'B'
+decoded_password = ''
+
+for b in hex_bytes:
+    decoded_password += chr(b ^ xor_key)
+
+print(decoded_password)
+```
+
+Running this script yielded the correctly decoded password.
+
+## 6. Conclusion
+The decoded access code, which is the flag for this challenge, is:
+`csd{1nt0_th3_m41nfr4m3}`

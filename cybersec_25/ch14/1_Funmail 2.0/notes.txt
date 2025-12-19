@@ -1,0 +1,111 @@
+   0x56555cf9 <+469>:	lea    esp,[ecx-0x4]
+   0x56555cfc <+472>:	ret
+End of assembler dump.
+pwndbg> break *0x56555cfc
+Breakpoint 4 at 0x56555cfc
+pwndbg> c
+Continuing.
+Username: john galt
+
+Breakpoint 3, 0x565558b7 in getLine ()
+LEGEND: STACK | HEAP | CODE | DATA | WX | RODATA
+──────────────────────────────────────────────────────[ REGISTERS / show-flags on / show-compact-regs off ]───────────────────────────────────────────────────────
+*EAX  0xffffd686 ◂— 0x5034ffff
+ EBX  0x56558000 (_GLOBAL_OFFSET_TABLE_) ◂— 0x2ef4
+ ECX  0xf7faf000 (_GLOBAL_OFFSET_TABLE_) ◂— 0x229dac
+ EDX  0
+ EDI  0xf7ffcb80 (_rtld_global_ro) ◂— 0
+ ESI  0xffffd7b4 —▸ 0xffffd8d4 ◂— '/app/funmail2.0'
+ EBP  0xffffd628 —▸ 0xffffd6e8 —▸ 0xf7ffd020 (_rtld_global) —▸ 0xf7ffda40 —▸ 0x56555000 ◂— ...
+ ESP  0xffffd624 —▸ 0x56558000 (_GLOBAL_OFFSET_TABLE_) ◂— 0x2ef4
+ EIP  0x565558b7 (getLine+4) ◂— sub esp, 0x14
+ EFLAGS 0x292 [ cf pf AF zf SF IF df of ac ]
+────────────────────────────────────────────────────────────────[ DISASM / i386 / set emulate on ]────────────────────────────────────────────────────────────────
+ ► 0x565558b7 <getLine+4>     sub    esp, 0x14     ESP => 0xffffd610 (0xffffd624 - 0x14)
+   0x565558ba <getLine+7>     call   __x86.get_pc_thunk.bx       <__x86.get_pc_thunk.bx>
+
+   0x565558bf <getLine+12>    add    ebx, 0x2741
+   0x565558c5 <getLine+18>    mov    eax, dword ptr [ebx - 0x10]
+   0x565558cb <getLine+24>    mov    edx, dword ptr [eax]
+   0x565558cd <getLine+26>    mov    eax, dword ptr [ebp + 0xc]
+   0x565558d0 <getLine+29>    sub    esp, 4
+   0x565558d3 <getLine+32>    push   edx
+   0x565558d4 <getLine+33>    push   eax
+   0x565558d5 <getLine+34>    push   dword ptr [ebp + 8]
+   0x565558d8 <getLine+37>    call   fgets@plt                   <fgets@plt>
+────────────────────────────────────────────────────────────────────────────[ STACK ]─────────────────────────────────────────────────────────────────────────────
+00:0000│ esp 0xffffd624 —▸ 0x56558000 (_GLOBAL_OFFSET_TABLE_) ◂— 0x2ef4
+01:0004│ ebp 0xffffd628 —▸ 0xffffd6e8 —▸ 0xf7ffd020 (_rtld_global) —▸ 0xf7ffda40 —▸ 0x56555000 ◂— ...
+02:0008│+004 0xffffd62c —▸ 0x56555c4d (main+297) ◂— add esp, 0x10
+03:000c│+008 0xffffd630 —▸ 0xffffd686 ◂— 0x5034ffff
+04:0010│+00c 0xffffd634 ◂— 0x40 /* '@' */
+05:0014│+010 0xffffd638 —▸ 0xffffd6e8 —▸ 0xf7ffd020 (_rtld_global) —▸ 0xf7ffda40 —▸ 0x56555000 ◂— ...
+06:0018│+014 0xffffd63c —▸ 0x56555b9d (main+121) ◂— sub esp, 0xc
+07:001c│+018 0xffffd640 ◂— 0x1000000
+──────────────────────────────────────────────────────────────────────────[ BACKTRACE ]───────────────────────────────────────────────────────────────────────────
+ ► 0 0x565558b7 getLine+4
+   1 0x56555c4d main+297
+   2 0xf7da6519 __libc_start_call_main+121
+   3 0xf7da65f3 __libc_start_main+147
+   4 0x56555571 _start+49
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+pwndbg> c
+Continuing.
+Password: more-secure-password
+	Welcome john galt!
+
+ERROR! Program failed to load emails.
+Terminating
+
+
+Breakpoint 4, 0x56555cfc in main ()
+LEGEND: STACK | HEAP | CODE | DATA | WX | RODATA
+──────────────────────────────────────────────────────[ REGISTERS / show-flags on / show-compact-regs off ]───────────────────────────────────────────────────────
+*EAX  0
+*EBX  0xf7faf000 (_GLOBAL_OFFSET_TABLE_) ◂— 0x229dac
+*ECX  0xffffd700 ◂— 1
+*EDX  1
+ EDI  0xf7ffcb80 (_rtld_global_ro) ◂— 0
+ ESI  0xffffd7b4 —▸ 0xffffd8d4 ◂— '/app/funmail2.0'
+*EBP  0xf7ffd020 (_rtld_global) —▸ 0xf7ffda40 —▸ 0x56555000 ◂— jg 0x56555047
+*ESP  0xffffd6fc —▸ 0xf7da6519 (__libc_start_call_main+121) ◂— add esp, 0x10
+*EIP  0x56555cfc (main+472) ◂— ret
+*EFLAGS 0x282 [ cf pf af zf SF IF df of ac ]
+────────────────────────────────────────────────────────────────[ DISASM / i386 / set emulate on ]────────────────────────────────────────────────────────────────
+ ► 0x56555cfc <main+472>                      ret                                <__libc_start_call_main+121>
+    ↓
+   0xf7da6519 <__libc_start_call_main+121>    add    esp, 0x10     ESP => 0xffffd710 (0xffffd700 + 0x10)
+   0xf7da651c <__libc_start_call_main+124>    sub    esp, 0xc      ESP => 0xffffd704 (0xffffd710 - 0xc)
+   0xf7da651f <__libc_start_call_main+127>    push   eax
+   0xf7da6520 <__libc_start_call_main+128>    call   exit                        <exit>
+
+   0xf7da6525 <__libc_start_call_main+133>    call   __nptl_deallocate_tsd       <__nptl_deallocate_tsd>
+
+   0xf7da652a <__libc_start_call_main+138>    mov    eax, dword ptr [esp]
+   0xf7da652d <__libc_start_call_main+141>    lock dec dword ptr [eax + 0x118]
+   0xf7da6534 <__libc_start_call_main+148>    sete   al
+   0xf7da6537 <__libc_start_call_main+151>    test   al, al
+   0xf7da6539 <__libc_start_call_main+153>    jne    __libc_start_call_main+179  <__libc_start_call_main+179>
+────────────────────────────────────────────────────────────────────────────[ STACK ]─────────────────────────────────────────────────────────────────────────────
+00:0000│ esp 0xffffd6fc —▸ 0xf7da6519 (__libc_start_call_main+121) ◂— add esp, 0x10
+01:0004│ ecx 0xffffd700 ◂— 1
+02:0008│     0xffffd704 —▸ 0xffffd7b4 —▸ 0xffffd8d4 ◂— '/app/funmail2.0'
+03:000c│     0xffffd708 —▸ 0xffffd7bc —▸ 0xffffd8e4 ◂— 'LESSOPEN=| /usr/bin/lesspipe %s'
+04:0010│     0xffffd70c —▸ 0xffffd720 —▸ 0xf7faf000 (_GLOBAL_OFFSET_TABLE_) ◂— 0x229dac
+05:0014│     0xffffd710 —▸ 0xf7faf000 (_GLOBAL_OFFSET_TABLE_) ◂— 0x229dac
+06:0018│     0xffffd714 —▸ 0x56555b24 (main) ◂— lea ecx, [esp + 4]
+07:001c│     0xffffd718 ◂— 1
+──────────────────────────────────────────────────────────────────────────[ BACKTRACE ]───────────────────────────────────────────────────────────────────────────
+ ► 0 0x56555cfc main+472
+   1 0xf7da6519 __libc_start_call_main+121
+   2 0xf7da65f3 __libc_start_main+147
+   3 0x56555571 _start+49
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+pwndbg> p printFlag
+$1 = {<text variable, no debug info>} 0x56555785 <printFlag>
+pwndbg> jump *0x56555785
+Continuing at 0x56555785.
+TUCTF{l0c4l_<_r3m073_3x3cu710n}
+[Inferior 1 (process 227) exited normally]
+
+-- abbiamo inserito un b sul ret del main per poi jumpare all'indirizzo di printFlag.

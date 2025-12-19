@@ -1,0 +1,88 @@
+CTF Challenge: Kramazon (Advent Cyber 05)
+Writeup by: Gemini Agent
+
+--- CHALLENGE OVERVIEW ---
+
+The objective was to exploit a vulnerability in the "Kramazon" online store to obtain "Santa Priority Delivery" status. This would reveal a restricted manifest containing the flag. The description hinted at an implementation flaw in the checkout system.
+
+Target URL: https://kramazon.csd.lol/
+
+--- STEP 1: INITIAL RECONNAISSANCE ---
+
+Upon visiting the site, we inspected the HTTP cookies and found an interesting cookie named 'auth'.
+Value (URL-decoded): "BA4FBg=="
+Base64 decoded bytes: \x04 \x0e \x05 \x06
+
+We also inspected the HTML source code and located a client-side script: 'script.js'.
+
+--- STEP 2: CODE ANALYSIS ---
+
+Reading 'script.js' revealed the logic for the ordering process:
+1. The user clicks "Order".
+2. A POST request is sent to `/create-order`.
+3. The client waits for a callback URL to return the status.
+4. If successful, a POST request is sent to `/finalize`.
+
+Crucially, the script contained a suspicious function and a check:
+
+    function santaMagic(n) {
+        return n ^ 0x37; // TODO: remove in production
+    }
+
+    if (status.internal.user === 1) {
+        alert("Welcome, Santa! Allowing priority finalize...");
+    }
+
+This strongly suggested that the User ID is obfuscated using a simple XOR operation with the key 0x37.
+
+--- STEP 3: REVERSE ENGINEERING THE COOKIE ---
+
+We tested the XOR hypothesis on the original cookie bytes:
+Original bytes: 04 0E 05 06
+Key: 0x37 (ASCII '7')
+
+Calculation:
+0x04 ^ 0x37 = 0x33 ('3')
+0x0E ^ 0x37 = 0x39 ('9')
+0x05 ^ 0x37 = 0x32 ('2')
+0x06 ^ 0x37 = 0x31 ('1')
+
+The resulting string is "3921", which is likely the default User ID assigned to a guest.
+
+To become User ID 1 (Santa), we needed to reverse the operation for the character '1'.
+
+Target character: '1' (ASCII 0x31)
+Calculation: 0x31 ^ 0x37 = 0x06
+
+So, the forged cookie payload should be a single byte: \x06.
+Base64 encoding of \x06 is "Bg==".
+
+--- STEP 4: EXPLOITATION ---
+
+We crafted a Python script to perform the following:
+1. Set the 'auth' cookie to "Bg==".
+2. Create a new order via `/create-order`.
+3. Call `/finalize` with the order ID.
+
+When calling `/finalize` with the forged cookie, the server recognized us as user "1" (Santa) and returned a JSON response containing a hidden path:
+
+Response snippet:
+"privileged": true
+"internal_route": "/priority/manifest/route-2025-SANTA.txt"
+
+--- STEP 5: CAPTURING THE FLAG ---
+
+We sent a final GET request to the hidden manifest URL, ensuring we kept the forged 'auth=Bg==' cookie (just in case authentication was required for the file).
+
+URL: https://kramazon.csd.lol/priority/manifest/route-2025-SANTA.txt
+
+Content:
+"North Pole Logistics Directorate – PRIORITY ROUTE MANIFEST"
+...
+FLAG: csd{npld_async_callback_idor_mastery}
+
+--- SUMMARY ---
+
+The vulnerability was an Insecure Direct Object Reference (IDOR) combined with weak cryptography (single-byte XOR) in the session cookie. By forging the cookie to represent User ID 1, we bypassed the access controls and retrieved the flag.
+
+Flag: csd{npld_async_callback_idor_mastery}

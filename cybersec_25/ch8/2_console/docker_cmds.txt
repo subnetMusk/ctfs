@@ -1,0 +1,3 @@
+Build: docker build -t cpp/console .
+Run: docker run  -d -p "127.0.0.1:8081:80" --name "console" "cpp/console"
+Stop: docker stop console

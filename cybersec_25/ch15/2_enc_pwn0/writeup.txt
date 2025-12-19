@@ -1,0 +1,18 @@
+root@d135eb9980ff:/app/2_enc_pwn0# ./pwn0
+How's the josh?
+a
+Your josh is low!
+Bye!
+root@d135eb9980ff:/app/2_enc_pwn0# ./pwn0
+How's the josh?
+aaaaaaaaaaaaaa
+Your josh is low!
+Bye!
+root@d135eb9980ff:/app/2_enc_pwn0# ./pwn0
+How's the josh?
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH!gh
+Good! here's the flag
+encryptCTF{L3t5_R4!53_7h3_J05H}
+
+
+abbiamo calcolato la distanza tra la stringa s (quella richiesta in input) e la stringa s1 (ossia dove il binario faceva il controllo per stampare la flag)

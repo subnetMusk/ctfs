@@ -1,0 +1,12 @@
+services:
+  db:
+    image: mysql
+    env_file: other/password.env
+    volumes:
+      - ./other/db.sql:/docker-entrypoint-initdb.d/db.sql:ro
+
+  web:
+    build: .
+    env_file: other/password.env
+    ports:
+      - 8084:80

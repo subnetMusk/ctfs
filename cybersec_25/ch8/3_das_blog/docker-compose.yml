@@ -1,0 +1,43 @@
+version: "3.9"
+name: das_blog
+
+services:
+  db:
+    image: mariadb:10.11
+    container_name: das_blog_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?set in .env}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-dasblog}
+      MYSQL_USER: ${MYSQL_USER:-web}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?set in .env}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/init/db_seed.sql:/docker-entrypoint-initdb.d/db_seed.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  web:
+    image: cpp/das_blog_web
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: das_blog_web
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_NAME: ${MYSQL_DATABASE:-dasblog}
+      DB_USER: ${MYSQL_USER:-web}
+      DB_PASSWORD: ${MYSQL_PASSWORD:?set in .env}
+    ports:
+      - "8080:80"
+    volumes:
+      - ./web:/var/www/html:ro
+
+volumes:
+  db_data:

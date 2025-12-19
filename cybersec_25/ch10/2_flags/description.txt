@@ -1,0 +1,5 @@
+Welcome to fun with flags.
+
+Flag is at /flag
+
+(use ./docker_run.sh to run the server locally)

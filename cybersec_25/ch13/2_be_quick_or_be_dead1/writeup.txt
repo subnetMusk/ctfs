@@ -1,0 +1,17 @@
+pwndbg> handle SIGALRM ignore
+Signal        Stop	Print	Pass to program	Description
+SIGALRM       No	Yes	No		Alarm clock
+pwndbg> run
+Starting program: /app/be-quick-or-be-dead-1
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+Be Quick Or Be Dead 1
+=====================
+
+Calculating key...
+
+Program received signal SIGALRM, Alarm clock.
+Done calculating key
+Printing flag:
+picoCTF{why_bother_doing_unnecessary_computation_27f28e71}
+[Inferior 1 (process 209) exited normally]

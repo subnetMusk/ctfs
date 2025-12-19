@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title if title else 'Flask DevTools Demo' }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+      // Read cookie 'ui_theme' before paint and set a class on <html> to avoid FOUC
+      (function() {
+        function getCookie(name) {
+          const m = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+          return m ? decodeURIComponent(m[2]) : null;
+        }
+        var theme = getCookie('ui_theme');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('theme-dark');
+        } else {
+          document.documentElement.classList.remove('theme-dark');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <nav class="nav">
+      <a href="/" class="brand">DevTools Demo</a>
+      <div class="spacer"></div>
+      {% if session.get('user_id') %}
+        <span class="hello">Hi, {{ session.get('username') }}</span>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/logout">Logout</a>
+      {% else %}
+        <a href="/login">Login</a>
+      {% endif %}
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-wrap">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+  </body>
+</html>

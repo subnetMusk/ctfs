@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IDOR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body class="bg-gray-100">
+    <!-- Header Section -->
+    <header>
+      <!-- Top Navigation -->
+      <div class="flex items-center bg-[#131921] text-white p-1">
+        <!-- Logo -->
+        <div class="flex items-center p-1 pr-2 nav-link-border">
+          <a href="#" class="font-bold text-lg mx-2">
+            <img class="h-12 w-auto mt-2" src="/kramazon-pls-no-dmca.png" alt="Kramazon Logo" />
+          </a>
+        </div>
+
+        <!-- Deliver to -->
+        <div class="hidden md:flex items-center p-2 nav-link-border">
+          <i class="fas fa-map-marker-alt mr-1"></i>
+          <div>
+            <p class="text-xs text-gray-300">Deliver to</p>
+            <p class="text-sm font-bold" id="location"></p>
+          </div>
+        </div>
+
+        <!-- Search Bar with AI icon -->
+        <div class="flex-grow flex items-center mx-2 search-focus rounded-lg">
+          <div
+            class="bg-gray-200 text-gray-700 text-xs p-3 rounded-l-md hover:bg-gray-300 cursor-pointer h-10 flex items-center justify-center"
+          >
+            <span>All</span>
+            <i class="fas fa-caret-down ml-1"></i>
+          </div>
+          <input
+            class="w-full h-10 p-2 text-black text-base outline-none"
+            type="text"
+            placeholder="Search kramazon.csd.lol"
+          />
+          <div class="bg-gray-200 p-3 h-10 flex items-center justify-center">
+            <i class="fa-solid fa-wand-magic-sparkles text-orange-500"></i>
+          </div>
+          <div
+            class="bg-[#FEBD69] hover:bg-[#F3A847] p-3 rounded-r-md cursor-pointer h-10 flex items-center justify-center"
+          >
+            <i class="fas fa-search text-black"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Navigation -->
+      <div class="flex items-center bg-[#232F3E] text-white text-sm p-2 space-x-4">
+        <!-- YOU SAID NOT TO CHANGE THESE -->
+        <a href="#" class="flex items-center font-bold p-1 nav-link-border"><i class="fas fa-bars mr-1"></i> All</a>
+        <a href="#" class="p-1 nav-link-border">Sleighjacking Services</a>
+        <a href="#" class="p-1 nav-link-border">Coal-as-a-Service (CaaS™)</a>
+        <a href="#" class="p-1 nav-link-border">Holiday Phishing Kit</a>
+        <a href="#" class="p-1 nav-link-border">Gift Decryption Tools</a>
+        <a href="#" class="hidden md:inline-block p-1 nav-link-border">Elf Relocation Program</a>
+        <a href="#" class="hidden md:inline-block p-1 nav-link-border">Naughty List Editing & Data Removal</a>
+        <a href="#" class="hidden lg:inline-block p-1 nav-link-border">Anti-Caroler Countermeasures</a>
+        <a href="#" class="hidden lg:inline-block p-1 nav-link-border">Krampus Customer Support</a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-screen-2xl mx-auto">
+      <!-- Hero Section -->
+      <!-- <section class="relative">
+        <div class="slider-container h-[250px] sm:h-[400px] lg:h-[600px]">
+          <div class="slide active">
+            <img
+              src="https://images-eu.ssl-images-amazon.com/images/G/31/IN/Prime/GIF/25/Jupiter_Early-Deals_8sep_PC_hero_1x._CB800480062_.jpg"
+              alt="KRAMPUS Early Deals Event — Unauthorized Inventory Liquidation"
+            />
+          </div>
+          <div class="slide">
+            <img
+              src="https://images-eu.ssl-images-amazon.com/images/G/31/CookwareDining/Jupiter25/GW/KSD/RV/RV1/KDRV3000x1200._CB800539012_.png"
+              alt="Elf-Liberated Kitchenware — 80% Off"
+            />
+          </div>
+          <div class="slide">
+            <img
+              src="https://images-eu.ssl-images-amazon.com/images/G/31/img24/Wireless/Madhav/Jupiter25/Apple/PC_PB_Leadup_Lifestyle_CS._CB800749216_.jpg"
+              alt="Black Ice Phone Deals — Smuggled Tech Clearance"
+            />
+          </div>
+
+          <button class="slider-btn prev" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="slider-btn next" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <div class="absolute inset-x-0 bottom-0 h-32 sm:h-64 bg-gradient-to-t from-gray-100 to-transparent"></div>
+      </section> -->
+
+      <!-- Product Grid -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6 relative z-10">
+        <!-- Card 1 -->
+        <div class="bg-white p-4 rounded-md shadow-md overflow-hidden">
+          <h2 class="text-xl font-bold mb-2">Unlock the Darkest Deals of Kramazon</h2>
+          <!-- UPDATED -->
+          <img src="/krime-loyalty-program.png" class="w-full h-auto object-cover rounded-md" />
+          <a href="#" class="mt-4 inline-block">Join Krime™ Loyalty Program</a>
+          <!-- UPDATED -->
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-white p-4 rounded-md shadow-md overflow-hidden">
+          <h2 class="text-xl font-bold mb-2">Up to 60% Off | Disguises for Seasonal Ops</h2>
+          <!-- UPDATED -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <img
+                src="https://images-eu.ssl-images-amazon.com/images/G/31/img22/Fashion/Gateway/BAU/BTF-Refresh/May/PC_WF/WF1-186-116._SY116_CB636048992_.jpg"
+                class="h-24 w-full object-cover"
+              />
+              <p class="text-xs mt-1">Operational Cloaks</p>
+              <!-- UPDATED -->
+            </div>
+            <div>
+              <img
+                src="https://images-eu.ssl-images-amazon.com/images/G/31/img22/Fashion/Gateway/BAU/BTF-Refresh/May/PC_WF/WF2-186-116._SY116_CB636048992_.jpg"
+                class="h-24 w-full object-cover"
+              />
+              <p class="text-xs mt-1">Encrypted Carry Bags</p>
+              <!-- UPDATED -->
+            </div>
+            <div>
+              <img
+                src="https://images-eu.ssl-images-amazon.com/images/G/31/img22/Fashion/Gateway/BAU/BTF-Refresh/May/PC_WF/WF4-186-116._SY116_CB636048992_.jpg"
+                class="h-24 w-full object-cover"
+              />
+              <p class="text-xs mt-1">Time-Sync Wrist Modules</p>
+              <!-- UPDATED -->
+            </div>
+            <div>
+              <img
+                src="https://images-eu.ssl-images-amazon.com/images/G/31/img22/Fashion/Gateway/BAU/BTF-Refresh/May/PC_WF/WF3-186-116._SY116_CB636048992_.jpg"
+                class="h-24 w-full object-cover"
+              />
+              <p class="text-xs mt-1">Obfuscated Identity Trinkets</p>
+              <!-- UPDATED -->
+            </div>
+          </div>
+          <a href="#" class="mt-4 inline-block">View All Covert Wardrobe Kits</a>
+          <!-- UPDATED -->
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-white p-4 rounded-md shadow-md overflow-hidden">
+          <h2 class="text-xl font-bold mb-2">Order Your Zero-Day Advent Calendar™</h2>
+          <!-- UPDATED -->
+          <img src="/advent-calendar.png" class="w-full h-auto object-cover rounded-md" />
+          <button id="order" class="bg-gray-800 hover:bg-gray-900 w-full text-white p-2 rounded-lg mt-4 font-semibold">
+            Order Now
+          </button>
+          <!-- UPDATED -->
+        </div>
+
+        <!-- Sign In -->
+        <div class="flex flex-col space-y-4">
+          <div class="bg-white p-4 rounded-md shadow-md text-center">
+            <h2 class="text-xl font-bold">Log In for Personalized Krampus Intelligence</h2>
+            <!-- UPDATED -->
+            <button class="bg-yellow-400 hover:bg-yellow-500 w-full p-2 rounded-lg mt-4 font-semibold">
+              Coming Soon
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Today's Deals -->
+      <section class="bg-white p-6 m-6 rounded-md shadow-md">
+        <h2 class="text-xl font-bold mb-2">
+          Black-Market Flash Deals
+          <a href="#" class="text-sm ml-4">See all deals</a>
+        </h2>
+
+        <div class="flex items-center overflow-x-auto product-carousel pb-4">
+          <div class="flex space-x-6">
+            <div class="flex-shrink-0 w-48 text-left">
+              <div class="bg-gray-100 p-4 rounded-md">
+                <img src="https://m.media-amazon.com/images/I/71nUHQam5RL._AC_UY218_.jpg" class="h-32 mx-auto" />
+              </div>
+              <p class="mt-2 text-sm truncate">Top Seller in Compromised Devices</p>
+              <!-- UPDATED -->
+              <p class="text-red-600 font-bold mt-1 text-sm bg-red-100 px-2 py-1 rounded inline-block">Up to 45% off</p>
+            </div>
+
+            <div class="flex-shrink-0 w-48 text-left">
+              <div class="bg-gray-100 p-4 rounded-md">
+                <img src="https://m.media-amazon.com/images/I/315vs3rLEZL._AC_SY200_.jpg" class="h-32 mx-auto" />
+              </div>
+              <p class="mt-2 text-sm truncate">HP FrostByte 15s — NPLD Leak Edition</p>
+              <!-- UPDATED -->
+              <p class="text-red-600 font-bold mt-1 text-sm bg-red-100 px-2 py-1 rounded inline-block">
+                Deal of the Day
+              </p>
+            </div>
+
+            <div class="flex-shrink-0 w-48 text-left">
+              <div class="bg-gray-100 p-4 rounded-md">
+                <img src="https://m.media-amazon.com/images/I/616wnQmPQ-L._AC_UY218_.jpg" class="h-32 mx-auto" />
+              </div>
+              <p class="mt-2 text-sm truncate">OnePlus NORDIC-4 5G (North Pole Edition)</p>
+              <!-- UPDATED -->
+              <p class="text-red-600 font-bold mt-1 text-sm bg-red-100 px-2 py-1 rounded inline-block">
+                Save up to 10%
+              </p>
+            </div>
+
+            <div class="flex-shrink-0 w-48 text-left">
+              <div class="bg-gray-100 p-4 rounded-md">
+                <img src="https://m.media-amazon.com/images/I/61-XNG5lPBL._AC_UY218_.jpg" class="h-32 mx-auto" />
+              </div>
+              <p class="mt-2 text-sm truncate">Intercept-Grade Audio Gear (Syndicate Series)</p>
+              <!-- UPDATED -->
+              <p class="text-red-600 font-bold mt-1 text-sm bg-red-100 px-2 py-1 rounded inline-block">Up to 75% off</p>
+            </div>
+
+            <div class="flex-shrink-0 w-48 text-left">
+              <div class="bg-gray-100 p-4 rounded-md">
+                <img src="https://m.media-amazon.com/images/I/61Z-M7aDd2L._AC_UL320_.jpg" class="h-32 mx-auto" />
+              </div>
+              <p class="mt-2 text-sm truncate">Extraction Suitcases & Tactical Bags</p>
+              <!-- UPDATED -->
+              <p class="text-red-600 font-bold mt-1 text-sm bg-red-100 px-2 py-1 rounded inline-block">Min. 70% off</p>
+            </div>
+
+            <div class="flex-shrink-0 w-48 text-left">
+              <div class="bg-gray-100 p-4 rounded-md">
+                <img src="https://m.media-amazon.com/images/I/71UnjM6ErlL._AC_UL320_.jpg" class="h-32 mx-auto" />
+              </div>
+              <p class="mt-2 text-sm truncate">Operational Apparel — Starting at $1.99</p>
+              <!-- UPDATED -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sustainable Finds -->
+      <section class="bg-white p-6 m-6 rounded-md shadow-md">
+        <h2 class="text-xl font-bold mb-2">Ethically Sourced (Stolen) Inventory</h2>
+        <!-- UPDATED -->
+        <div class="flex items-center overflow-x-auto product-carousel pb-4">
+          <div class="flex space-x-6">
+            <!-- images unchanged -->
+            <div class="flex-shrink-0 w-40">
+              <img src="https://images-eu.ssl-images-amazon.com/images/I/31E4WCkI6tL._AC_UL165_SR165,165_.jpg" />
+            </div>
+            <div class="flex-shrink-0 w-40">
+              <img src="https://images-eu.ssl-images-amazon.com/images/I/71Ddd8BsFjL._AC_UL165_SR165,165_.jpg" />
+            </div>
+            <div class="flex-shrink-0 w-40">
+              <img src="https://m.media-amazon.com/images/I/71DiuntB4aL._AC_SY200_.jpg" />
+            </div>
+            <div class="flex-shrink-0 w-40">
+              <img src="https://images-eu.ssl-images-amazon.com/images/I/71k6eOu04uL._AC_UL165_SR165,165_.jpg" />
+            </div>
+            <div class="flex-shrink-0 w-40">
+              <img src="https://m.media-amazon.com/images/I/61qJt25FguL._AC_UL165_SR165,165_.jpg" />
+            </div>
+            <div class="flex-shrink-0 w-40">
+              <img src="https://images-eu.ssl-images-amazon.com/images/I/61iMtujTnBL._AC_UL165_SR165,165_.jpg" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Electronics Hub -->
+      <section class="bg-white p-6 m-6 rounded-md shadow-md">
+        <h2 class="text-xl font-bold mb-2">Up to 70% Off | Krampus Cyber Division Clearance</h2>
+        <!-- UPDATED -->
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div class="flex-shrink-0">
+            <a href="#"><img src="https://m.media-amazon.com/images/I/61dD-ZZV-nL._AC_UL200_.jpg" /></a>
+          </div>
+          <div class="flex-shrink-0">
+            <a href="#"><img src="https://m.media-amazon.com/images/I/31VjlrbE3bL._AC_SY200_.jpg" /></a>
+          </div>
+          <div class="flex-shrink-0">
+            <a href="#"><img src="https://m.media-amazon.com/images/I/61qlK8MUyiL._AC_UL200_.jpg" /></a>
+          </div>
+          <div class="flex-shrink-0">
+            <a href="#"><img src="https://m.media-amazon.com/images/I/71CxgCKczdL._AC_UL200_.jpg" /></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Inspired by browsing -->
+      <section class="bg-white p-6 m-6 rounded-md shadow-md">
+        <h2 class="text-xl font-bold mb-2">Recommended Tools for Your Next Operation</h2>
+        <!-- UPDATED -->
+
+        <div class="flex items-center overflow-x-auto product-carousel pb-4">
+          <div class="flex space-x-6">
+            <!-- PRODUCT 1 -->
+            <div class="flex-shrink-0 w-48 text-left">
+              <a href="#"
+                ><img src="https://m.media-amazon.com/images/I/716CRTrQzgL._AC_UY320_.jpg" class="h-40 mx-auto"
+              /></a>
+              <p class="mt-2 text-sm">Sleigh-Silent EarComms 141</p>
+              <!-- UPDATED -->
+              <p class="text-yellow-500 mt-1">★★★★☆ <span class="text-gray-600">(1,234)</span></p>
+              <p class="font-bold">₹1,299.00</p>
+            </div>
+
+            <!-- PRODUCT 2 -->
+            <div class="flex-shrink-0 w-48 text-left">
+              <a href="#"
+                ><img src="https://m.media-amazon.com/images/I/719C6bJv8jL._AC_UL320_.jpg" class="h-40 mx-auto"
+              /></a>
+              <p class="mt-2 text-sm">Lenovo IcePad Slim 3</p>
+              <!-- UPDATED -->
+              <p class="text-yellow-500 mt-1">★★★★☆ <span class="text-gray-600">(456)</span></p>
+              <p class="font-bold">₹38,990.00</p>
+            </div>
+
+            <!-- PRODUCT 3 -->
+            <div class="flex-shrink-0 w-48 text-left">
+              <a href="#"
+                ><img src="https://m.media-amazon.com/images/I/61amb0CfMGL._AC_UY320_.jpg" class="h-40 mx-auto"
+              /></a>
+              <p class="mt-2 text-sm">OnePlus 11R — Rudolph Edition</p>
+              <!-- UPDATED -->
+              <p class="text-yellow-500 mt-1">★★★★★ <span class="text-gray-600">(8,910)</span></p>
+              <p class="font-bold">₹39,999.00</p>
+            </div>
+
+            <!-- PRODUCT 4 -->
+            <div class="flex-shrink-0 w-48 text-left">
+              <a href="#"
+                ><img src="https://m.media-amazon.com/images/I/51Y5q+QPCRL._AC_UY320_.jpg" class="h-40 mx-auto"
+              /></a>
+              <p class="mt-2 text-sm">The Psychology of Naughty-List Exploits</p>
+              <!-- UPDATED -->
+              <p class="text-yellow-500 mt-1">★★★★★ <span class="text-gray-600">(50,321)</span></p>
+              <p class="font-bold">₹350.00</p>
+            </div>
+
+            <!-- PRODUCT 5 -->
+            <div class="flex-shrink-0 w-48 text-left">
+              <a href="#"
+                ><img src="https://m.media-amazon.com/images/I/71oXoIMlfTL._AC_UY320_.jpg" class="h-40 mx-auto"
+              /></a>
+              <p class="mt-2 text-sm">MI 4K Surveillance Monitor</p>
+              <!-- UPDATED -->
+              <p class="text-yellow-500 mt-1">★★★★☆ <span class="text-gray-600">(3,210)</span></p>
+              <p class="font-bold">₹29,999.00</p>
+            </div>
+
+            <!-- PRODUCT 6 -->
+            <div class="flex-shrink-0 w-48 text-left">
+              <a href="#"
+                ><img src="https://m.media-amazon.com/images/I/71162EQnpKL._AC_UY320_.jpg" class="h-40 mx-auto"
+              /></a>
+              <p class="mt-2 text-sm">Galaxy Watch 6 (Elf-Tracking Firmware)</p>
+              <!-- UPDATED -->
+              <p class="text-yellow-500 mt-1">★★★★☆ <span class="text-gray-600">(6,789)</span></p>
+              <p class="font-bold">₹14,990.00</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Books -->
+      <section class="bg-white p-6 m-6 rounded-md shadow-md">
+        <h2 class="text-xl font-bold mb-2">Top Classified Reads in the Syndicate Archives</h2>
+        <!-- UPDATED -->
+        <div class="flex items-center overflow-x-auto product-carousel pb-4">
+          <div class="flex space-x-4">
+            <!-- images unchanged -->
+            <div class="flex-shrink-0 w-36">
+              <a href="#"><img src="https://m.media-amazon.com/images/I/71sBtM3Yi5L._AC_SY200_.jpg" /></a>
+            </div>
+            <div class="flex-shrink-0 w-36">
+              <a href="#"><img src="https://m.media-amazon.com/images/I/81BE7eeKzAL._AC_SY200_.jpg" /></a>
+            </div>
+            <div class="flex-shrink-0 w-36">
+              <a href="#"><img src="https://m.media-amazon.com/images/I/715qi-cIbML._AC_UY200_.jpg" /></a>
+            </div>
+            <div class="flex-shrink-0 w-36">
+              <a href="#"><img src="https://m.media-amazon.com/images/I/81l3rZK4lnL._AC_UY200_.jpg" /></a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+      <div class="border-t border-gray-300 py-6 my-6">
+        <div class="text-center">
+          <p class="text-sm">See personalized recommendations</p>
+          <button class="bg-yellow-400 hover:bg-yellow-500 w-64 p-2 rounded-lg my-2 font-semibold text-sm">
+            Sign in
+          </button>
+          <p class="text-xs">New customer? <a href="#" class="">Start here.</a></p>
+        </div>
+      </div>
+
+      <div class="text-center p-4 bg-[#37475A] hover:bg-[#4A5C70] cursor-pointer" id="backToTopBtn">
+        <p class="text-white text-sm">Back to top</p>
+      </div>
+
+      <div class="bg-[#232F3E] text-white">
+        <div class="max-w-screen-xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 px-4 py-10">
+          <div>
+            <h3 class="font-bold mb-2">Get to Know Us</h3>
+            <ul class="text-sm space-y-2 text-gray-300">
+              <li><a href="#" class="">About Us</a></li>
+              <li><a href="#" class="">Careers</a></li>
+              <li><a href="#" class="">Press Releases</a></li>
+              <li><a href="#" class="">Amazon Science</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-bold mb-2">Connect with Us</h3>
+            <ul class="text-sm space-y-2 text-gray-300">
+              <li><a href="#" class="">Facebook</a></li>
+              <li><a href="#" class="">Twitter</a></li>
+              <li><a href="#" class="">Instagram</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-bold mb-2">Make Money with Us</h3>
+            <ul class="text-sm space-y-2 text-gray-300">
+              <li><a href="#" class="">Sell on Amazon</a></li>
+              <li><a href="#" class="">Sell under Amazon Accelerator</a></li>
+              <li><a href="#" class="">Become an Affiliate</a></li>
+              <li><a href="#" class="">Advertise Your Products</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-bold mb-2">Let Us Help You</h3>
+            <ul class="text-sm space-y-2 text-gray-300">
+              <li><a href="#" class="">COVID-19 and Amazon</a></li>
+              <li><a href="#" class="">Your Account</a></li>
+              <li><a href="#" class="">Returns Centre</a></li>
+              <li><a href="#" class="">Help</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-[#131921] text-gray-300 text-xs py-6">
+        <div class="max-w-screen-xl mx-auto text-center">
+          <img class="h-6 w-auto mx-auto mb-4" src="/kramazon-pls-no-dmca.png" alt="Amazon Logo" />
+          <p>© 2025 Kramazon, Inc.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

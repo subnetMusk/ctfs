@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  web:
+    image: cpp/das_blog_web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 9002:80
+    container_name: vault_web
+    depends_on:
+      - database
+    # volumes:
+    #   - ./src:/var/www/html
+
+  database:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: vault
+    restart: always
+    container_name: vault_db
+    volumes:
+      - ./dump:/docker-entrypoint-initdb.d

@@ -1,0 +1,57 @@
+pwndbg> break *0x4008A2
+Breakpoint 3 at 0x4008a2
+pwndbg> c
+Continuing.
+.....................................
+Breakpoint 3, 0x00000000004008a2 in decrypt_flag ()
+LEGEND: STACK | HEAP | CODE | DATA | WX | RODATA
+──────────────────────────────────────────────────────[ REGISTERS / show-flags off / show-compact-regs off ]──────────────────────────────────────────────────────
+*RAX  0x25
+ RBX  0
+*RCX  0x7fffffffe582 ◂— 0x610000007fffff00
+*RDX  0x6022a0 ◂— 'picoCTF{gDb_iS_sUp3r_u53fuL_f3f39814}'
+*RDI  0x10
+*RSI  0x52
+*R8   0xfffffffffffffff
+*R9   0
+*R10  0x7ffff7f4cac0 (_nl_C_LC_CTYPE_toupper+512) ◂— 0x100000000
+*R11  0x7ffff7f4d3c0 (_nl_C_LC_CTYPE_class+256) ◂— 0x2000200020002
+ R12  0x7fffffffe6c8 —▸ 0x7fffffffe8e2 ◂— '/app/run'
+ R13  0x4008c9 (main) ◂— push rbp
+ R14  0
+ R15  0x7ffff7ffd040 (_rtld_global) —▸ 0x7ffff7ffe2e0 ◂— 0
+ RBP  0x7fffffffe590 —▸ 0x7fffffffe5b0 ◂— 1
+ RSP  0x7fffffffe560 —▸ 0x7ffff7fa9780 (_IO_2_1_stdout_) ◂— 0xfbad2887
+*RIP  0x4008a2 (decrypt_flag+284) ◂— add rax, rdx
+───────────────────────────────────────────────────────────────[ DISASM / x86-64 / set emulate on ]───────────────────────────────────────────────────────────────
+ ► 0x4008a2 <decrypt_flag+284>    add    rax, rdx              RAX => 0x6022c5 (0x25 + 0x6022a0)
+   0x4008a5 <decrypt_flag+287>    mov    byte ptr [rax], 0     [0x6022c5] <= 0
+   0x4008a8 <decrypt_flag+290>    mov    edi, 0xa              EDI => 0xa
+   0x4008ad <decrypt_flag+295>    call   putchar@plt                 <putchar@plt>
+
+   0x4008b2 <decrypt_flag+300>    nop
+   0x4008b3 <decrypt_flag+301>    mov    rax, qword ptr [rbp - 8]
+   0x4008b7 <decrypt_flag+305>    xor    rax, qword ptr fs:[0x28]
+   0x4008c0 <decrypt_flag+314>    je     decrypt_flag+321            <decrypt_flag+321>
+
+   0x4008c2 <decrypt_flag+316>    call   __stack_chk_fail@plt        <__stack_chk_fail@plt>
+
+   0x4008c7 <decrypt_flag+321>    leave
+   0x4008c8 <decrypt_flag+322>    ret
+────────────────────────────────────────────────────────────────────────────[ STACK ]─────────────────────────────────────────────────────────────────────────────
+00:0000│ rsp   0x7fffffffe560 —▸ 0x7ffff7fa9780 (_IO_2_1_stdout_) ◂— 0xfbad2887
+01:0008│-028   0x7fffffffe568 ◂— 0x27f7e0f6e5
+02:0010│-020   0x7fffffffe570 ◂— 0x35300000025 /* '%' */
+03:0018│-018   0x7fffffffe578 ◂— 0x52 /* 'R' */
+04:0020│ rcx-2 0x7fffffffe580 ◂— 0x7fffff003235 /* '52' */
+05:0028│-008   0x7fffffffe588 ◂— 0x69a52ceb80576100
+06:0030│ rbp   0x7fffffffe590 —▸ 0x7fffffffe5b0 ◂— 1
+07:0038│+008   0x7fffffffe598 —▸ 0x40090a (main+65) ◂— mov edi, 0x400a08
+──────────────────────────────────────────────────────────────────────────[ BACKTRACE ]───────────────────────────────────────────────────────────────────────────
+ ► 0         0x4008a2 decrypt_flag+284
+   1         0x40090a main+65
+   2   0x7ffff7db7d90 __libc_start_call_main+128
+   3   0x7ffff7db7e40 __libc_start_main+128
+   4         0x4006b9 _start+41
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+pwndbg>

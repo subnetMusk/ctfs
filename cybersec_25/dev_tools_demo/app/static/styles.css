@@ -1,0 +1,21 @@
+:root { font-family: system-ui, sans-serif; }
+html.theme-dark { --bg:#0b1220; --fg:#e6e6e6; --card:#111827; --muted:#9ca3af; --accent:#1f2937; }
+html:not(.theme-dark) { --bg:#f7f7fb; --fg:#222; --card:#fff; --muted:#4b5563; --accent:#f0f0f0; }
+
+body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); }
+.nav { display: flex; gap: 1rem; align-items: center; padding: .75rem 1rem; background: #111827; color: #fff; }
+.nav a { color: #fff; text-decoration: none; }
+.brand { font-weight: 700; }
+.spacer { flex: 1; }
+main { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+.card { background: var(--card); border-radius: 12px; padding: 1rem; margin: 1rem 0; box-shadow: 0 4px 12px rgba(0,0,0,.06); }
+button { padding: .5rem .8rem; border-radius: 8px; border: 1px solid #ccc; background: var(--accent); cursor: pointer; color: var(--fg); }
+.form { display: grid; gap: .75rem; max-width: 360px; }
+.form input { width: 100%; padding: .5rem; border: 1px solid #ccc; border-radius: 6px; background: var(--card); color: var(--fg); }
+.flash-wrap { position: sticky; top: 0; padding: 0 1rem; }
+.flash { padding: .5rem .75rem; border-radius: 8px; margin: .5rem 0; }
+.flash.success { background: #065f46; color: #ecfdf5; border: 1px solid #a7f3d0; }
+.flash.error { background: #991b1b; color: #fef2f2; border: 1px solid #fecaca; }
+.hidden { display: none; }
+.spoiler { cursor: pointer; background: #111827; color: #111827; border-radius: 4px; padding: 0 .25rem; }
+.spoiler:hover { outline: 1px dashed #6b7280; }

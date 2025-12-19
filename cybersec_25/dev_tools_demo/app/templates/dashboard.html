@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Private Dashboard</h1>
+  <p>Welcome, {{ username }}! This page is only visible after login. Inspect <strong>Cookies</strong> and <strong>Storage</strong> to see session and client-side data.</p>
+
+  <div class="card">
+    <h2>Save a preference</h2>
+    <label>Favorite color <input id="fav-color" type="text" placeholder="e.g. blue"></label>
+    <button id="btn-save-pref">Save</button>
+    <p id="save-status"></p>
+  </div>
+
+  <div class="card">
+    <h2>Client-set Cookie</h2>
+    <p>Click to set a cookie from JavaScript for demo: <code>ui_theme=dark</code>.</p>
+    <button id="btn-set-cookie">Set Cookie</button>
+  </div>
+{% endblock %}
