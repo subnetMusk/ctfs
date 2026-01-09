@@ -1,0 +1,2 @@
+A friendly program wants to greet you… but its goodbye might say more than it should. Can you convince it to reveal the flag? 
+connect to the challenge instance nc amiable-citadel.picoctf.net 59904.

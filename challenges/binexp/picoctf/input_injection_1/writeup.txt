@@ -1,0 +1,77 @@
+nc amiable-citadel.picoctf.net 63111                                                                                                                        ─╯
+What is your name?
+aaaaaaaaaacat${IFS}flag.txt
+Goodbye, aaaaaaaaaacat${IFS}flag.txt!
+picoCTF{0v3rfl0w_c0mm4nd_d3eb7161}
+
+
+--- bufferoverlow:
+
+La vulnerabilità risiede nella gestione della memoria all'interno della funzione fun(). Si tratta di un Buffer Overflow sullo Stack, ma con un obiettivo diverso dal solito: invece di sovrascrivere l'indirizzo di ritorno per prendere il controllo del programma, sovrascrivi una variabile locale adiacente.
+
+Ecco come funziona nel dettaglio, passo dopo passo:
+1. La disposizione in memoria (Lo Stack)
+
+Quando la funzione fun viene chiamata, il computer riserva dello spazio sulla memoria "Stack" per le sue variabili locali. Poiché sono dichiarate una dopo l'altra, il compilatore solitamente le mette vicine in memoria.
+
+Immagina la memoria come una fila di cassetti da 1 byte l'uno:
+
+    C[10]: 10 cassetti destinati a contenere il comando (inizialmente "uname").
+
+    BUFFER[10]: 10 cassetti destinati a contenere il tuo nome.
+
+Nello stack, spesso le variabili dichiarate per ultime si trovano a indirizzi più bassi. Quindi la memoria appare circa così:
+Plaintext
+
+[ Indirizzi Bassi ]
+Buffer (10 byte)  <-- Qui scrive strcpy(buffer, name)
+C (10 byte)       <-- Qui c'è "uname"
+[ Indirizzi Alti ]
+
+2. Il comportamento di strcpy
+
+La funzione strcpy(dest, src) ha un difetto fatale: non sa quanto è grande il contenitore di destinazione. Si limita a copiare byte dalla sorgente alla destinazione finché non incontra un carattere nullo (\0).
+
+Nel tuo codice:
+
+    strcpy(c, "uname") riempie i primi 6 byte di c con u, n, a, m, e, \0.
+
+    strcpy(buffer, name) inizia a copiare il tuo input dentro buffer.
+
+3. L'Overflow (Il "traboccamento")
+
+Se il tuo input (name) è lungo 15 caratteri, strcpy farà questo:
+
+    Scriverà i primi 10 caratteri dentro lo spazio di buffer.
+
+    Non si fermerà. Continuerà a scrivere i restanti 5 caratteri nello spazio di memoria immediatamente successivo.
+
+    Dato che c si trova subito dopo buffer, i caratteri extra andranno a sovrascrivere il contenuto di c.
+
+Visualizzazione dell'attacco
+
+Supponiamo che tu inserisca come nome: AAAAAAAAAA/bin/sh (10 'A' seguite dal comando).
+
+Prima della seconda strcpy:
+
+    buffer: [vuoto]
+
+    c: u n a m e \0
+
+Dopo strcpy(buffer, name):
+
+    I primi 10 byte di name (AAAAAAAAAA) riempiono buffer.
+
+    I byte successivi (/bin/sh) "traboccano" e finiscono dentro c.
+
+Stato finale della memoria:
+
+    buffer: A A A A A A A A A A
+
+    c: / b i n / s h \0
+
+4. L'esecuzione del comando
+
+L'ultima riga della funzione è system(c);. Il programma non "sa" che c è stato modificato maliziosamente. Lui legge semplicemente la stringa contenuta nell'area di memoria chiamata c. Invece di trovare uname, ora trova /bin/sh.
+
+Quindi, invece di stampare le informazioni sul kernel, il programma eseguirà system("/bin/sh"), aprendoti una shell di comando con cui puoi fare cat flag.txt.

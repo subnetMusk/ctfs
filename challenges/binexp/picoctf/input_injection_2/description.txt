@@ -1,0 +1,3 @@
+This program greets you and then runs a command. 
+But can you take control of what command it executes? 
+Connect to the program with netcat: nc amiable-citadel.picoctf.net 57546.

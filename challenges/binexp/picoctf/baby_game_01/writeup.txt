@@ -1,0 +1,78 @@
+08049764    int32_t main(int32_t argc, char** argv, char** envp)
+
+08049764    {
+08049764        void* const __return_addr_1 = __return_addr;
+08049772        int32_t* var_10 = &argc;
+08049784        void* gsbase;
+08049784        int32_t eax = *(uint32_t*)((char*)gsbase + 0x14);
+08049796        int32_t player[0x3];
+08049796        init_player(&player);
+080497ac        void map;
+080497ac        init_map(&map, &player);
+080497c5        print_map(&map, &player);
+080497d9        signal(2, sigint_handler);
+080497d9        
+08049805        while (true)
+08049805        {
+08049805            move_player(&player, getchar(), &map);
+0804981e            print_map(&map, &player);
+0804981e            
+0804982f            if (player[0] == 0x1d)
+0804982f            {
+0804983a                if (player[1] == 'Y')
+0804983a                    break;
+0804982f            }
+08049805        }
+08049805        
+08049846        puts("You win!");
+08049846        
+08049857        if (player[2])
+08049857        {
+08049863            puts("flage");
+0804986b            win();
+0804987c            fflush(*(uint32_t*)stdout);
+08049857        }
+08049857        
+0804988d        *(uint32_t*)((char*)gsbase + 0x14);
+0804988d        
+08049894        if (eax == *(uint32_t*)((char*)gsbase + 0x14))
+080498a4            return 0;
+080498a4        
+08049896        __stack_chk_fail_local();
+08049896        /* no return */
+08049764    }
+
+-----
+in parole povere player è una struct di 3 interi:
+{
+	x
+	y
+	flags
+}
+----
+
+la funzione moveplayer non esegue il check dei boundaries della mappa quindi facendo uscire il puntatore in alto a sx (ossia accedendo direttamente
+alla memoria scritta prima:
+-0000000000000AA4     player_t var_AA4; <----- dove vogliamo accedere
+-0000000000000A9B     // padding byte
+-0000000000000A9A     // padding byte
+-0000000000000A99     // padding byte
+-0000000000000A98     char var_A98[2700]; <----- la nostra mappa
+-000000000000000C     _DWORD var_C;
+-0000000000000008     _DWORD var_8;
+-0000000000000004     // padding byte
+-0000000000000003     // padding byte
+-0000000000000002     // padding byte
+-0000000000000001     // padding byte
++0000000000000000     _DWORD __saved_registers;
++0000000000000004     _UNKNOWN *__return_address;
++0000000000000008     int argc;
++000000000000000C     const char **argv;
++0000000000000010     const char **envp;
++0000000000000014
++0000000000000014 // end of stack variables
+)
+
+possiamo andare a sovrascrivere la struttura di player.
+
+Dunque skippiamo quei 3 byte di padding, i 2 byte di x,y e poi scriviamo direttamente su flags.

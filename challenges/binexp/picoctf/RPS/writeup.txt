@@ -1,0 +1,13 @@
+if (strstr(player_turn, loses[computer_turn])) {
+   puts("You win! Play again?");
+   return true;
+ } else {
+   puts("Seems like you didn't win this time. Play again?");
+   return false;
+ }
+
+---- questa funzione controlla banalmente che la stringa che ha inserito l'utente contenga la mossa che batte quella scelta dal computer.
+Inserendo dunque rock/paper/scissor ad ogni turno darà sempre vittoria essendo che la stringa contiene sempre la mossa che batte quella che il computer
+ha scelto. Ripetere per 5 volte ed ottenere la flag:
+
+picoCTF{50M3_3X7R3M3_1UCK_B69E01B8}

