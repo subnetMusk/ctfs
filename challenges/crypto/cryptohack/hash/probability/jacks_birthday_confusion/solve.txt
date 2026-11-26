@@ -1,0 +1,18 @@
+The last computation has made Jack a little worried about the safety of his hash, and after doing some more research it seems there's a bigger problem.
+
+Given no other data of the JACK11 hash algorithm, how many unique secrets would you expect to hash to have (on average) a 75% chance of a collision between two distinct secrets?
+
+Remember, given any input data, JACK11 has been designed to produce a deterministic bit array of length 11, which is sensitive to small changes using the avalanche effect.
+
+Solution:
+Per calcolare le possibilità che due segreti generino lo stesso hash usiamo la formula:
+n≈sqrt(2⋅H⋅ln(1/(1−P)​)​)
+
+Dove:
+- H è lo spazio degli hash (H=2^11)
+- P è la probabilità di collisione che vogliamo ottenere (75%)
+
+Dunque
+n≈sqrt(2⋅2048⋅ln(1/0,25​)​) = 75.35424
+
+Quindi dobbiamo usare 76 segreti per avere una probabilità di collisione di almeno il 75%.
